@@ -1,4 +1,4 @@
-# The Impecunious :video_game:
+# Starfreeze :video_game:
 WebRTC Gameplatform. 
 Try developement version of Starfreeze [Here](https://play.runeharlyk.dk/Starfreeze)
 and controller [Here](https://play.runeharlyk.dk/)
@@ -14,7 +14,7 @@ This mean it is usable everywhere with a host device and an internet connection 
 
 ### Tech
 
-The Impecunious uses a number of open source projects to work properly:
+Starfreeze uses a number of open source projects to work properly:
 
 * [NexusPeer.js] - Little webrtc project for making fast p2p connections
 * [nipplejs.js] - Awesome for making a dynamic joystick
