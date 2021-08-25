@@ -1,0 +1,123 @@
+.players{
+    background-color: var(--other-controller-color);
+    border: 3px solid var(--color-primary);
+    box-sizing: border-box;
+    height: 25px;
+    margin-top: 2px;
+    border-radius: 5px;
+    transition: transform 0.2s;
+  }
+  
+  .playerOverview.rotate .players{
+    animation: rotateController 0.2s normal;
+    transform: rotate(90deg);
+    margin-top: 17px;
+  }
+  
+  .rotate .battery{
+    margin-top: 17px;
+  }
+  
+  .material-icons.rotate{
+    transform: rotate(90deg);
+    margin-top: -6px;
+  }
+  
+  .players:first-child ,
+  .playerOverview:not(.players):first-child .players{
+    background-color: var(--first-controller-color);
+  }
+  
+  .playerOverview:not(.players):nth-child(2) .players,
+  .playerOverview:nth-child(2).players{
+    background-color: var(--second-controller-color);
+  }
+  
+  .playerOverviewContainer{
+    display: flex;
+    width: 100%;
+    height: 100%;
+    justify-content: space-evenly;
+    align-items: center;
+}
+.dots{
+    justify-content: space-evenly;
+    display: flex;
+    padding: 0px 2px 2px 2px;
+  }
+  
+  .dot {
+    height: 5px;
+    width: 5px;
+    background-color: grey;
+  }
+  
+  .playerOverview:not(:first-child).disconnected{
+    display: none;
+  }
+
+  .playerOverview:nth-child(3) .disconnected .playerOverview:nth-child(4){
+    /*display: none;*/
+  }
+  
+  .playerOverview:first-child .dot:first-child,
+  .playerOverview:nth-child(2) .dot:nth-child(2),
+  .playerOverview:nth-child(3) .dot:nth-child(3),
+  .playerOverview:nth-child(4) .dot:nth-child(4){
+    background-color:#1a7ffa;
+    transform: scale(1.1);
+  }
+  
+  .disconnected .dot{
+    animation: _fade 0.5s 3s infinite alternate forwards;
+  }
+  
+  .dot:first-child {
+    animation-delay: 0.25s;
+  }
+  .dot:nth-child(2) {
+    animation-delay: 0.5s;
+  }
+  .dot:nth-child(3) {
+    animation-delay: 0.75s;
+  }
+  .dot:last-child {
+    animation-delay: 1s;
+  }
+  @keyframes _fade {
+    from {
+      background-color:#1a7ffa;
+      transform: scale(1.1)
+    }
+    to {
+      background-color:grey;
+      transform: scale(1.1)
+    }
+  }
+  
+  .playerOverview.interactive{
+    transform: scale(1.5);
+  }
+  
+  .playerOverview:not(.players){
+    /*height: 100px;*/
+  }
+  
+  .playerOverview.players, .playerOverview:not(.players){
+    margin-right: 20px;
+    width: 55px;
+  }
+  
+  .rotated{
+    transform: rotateY(0deg) rotate(45deg);
+  }
+
+  @keyframes rotateController {
+    from{
+      margin-top: 2px;
+    }
+    to{
+      margin-top: 17px;
+    }
+  }
+  

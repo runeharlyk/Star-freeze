@@ -5,9 +5,101 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow: hidden;
+  user-select: none;
+  background-color: var(--background-color);
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+@media (prefers-color-scheme: dark) {
+    :root{
+      --background-color:#2f3136;
+      --font-color:#FFF;
+    }
+}
+
+div.game {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100wv;
+  height: 100vh;
+background: #0F2027;  /* fallback for old browsers */
+background: -webkit-linear-gradient(to right, #2C5364, #203A43, #0F2027);  /* Chrome 10-25, Safari 5.1-6 */
+background: linear-gradient(to right, #2C5364, #203A43, #0F2027); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+
+}
+
+#root {
+  height: 100vh;
+}
+
+:root {
+  --first-controller-color: #00BBE3;
+  --second-controller-color: #FF5D4C;
+  --other-controller-color: #2f3136;
+  cursor: inherit;
+}
+
+::-webkit-scrollbar {
+  width: 14px;
+  height: 18px;
+}
+
+::-webkit-scrollbar-thumb {
+  height: 6px;
+  border: 4px solid rgba(0, 0, 0, 0);
+  background-clip: padding-box;
+  background-color: #0000005c;
+  -webkit-border-radius: 7px;
+  -webkit-box-shadow: inset -1px -1px 0px rgba(0, 0, 0, 0.05),
+    inset 1px 1px 0px rgba(0, 0, 0, 0.05);
+}
+
+::-webkit-scrollbar-button {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+::-webkit-scrollbar-corner {
+  background-color: transparent;
+}
+
+::-webkit-scrollbar-track-piece:end {
+    background: transparent;
+    margin-bottom: 10px;
+}
+
+::-webkit-scrollbar-track-piece:start {
+    background: transparent;
+    margin-top: 10px;
+}
+
+.Active{
+  -webkit-animation: focus 1s infinite;
+    animation: focus 1s infinite;
+}
+
+.navChild {
+  box-sizing: border-box;
+  border-radius: 50%;
+}
+
+@keyframes focus {
+	0% {
+		box-shadow: 0 0 5px rgba(0, 0, 0, .05), 0 0 0 5px #3FE9D3;
+	}
+	50% {
+		box-shadow: 0 0 5px rgba(0, 0, 0, .05), 0 0 0 5px #04B9C3;
+	}
+	100% {
+		box-shadow: 0 0 5px rgba(0, 0, 0, .05), 0 0 0 5px #3FE9D3;
+	}
+}
+
+.centerItem{
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

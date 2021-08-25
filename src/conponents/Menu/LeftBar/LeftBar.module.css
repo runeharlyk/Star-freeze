@@ -1,0 +1,39 @@
+.main{
+    height: 100vh;
+    width: 200px;
+    background-color: red;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    position: absolute;
+}
+
+.buttonGroupTop{
+   display: flex;
+   align-items: center;
+   height: 12vh;
+   min-height: 135px;
+}
+
+.profilePic{
+    overflow: hidden;
+}
+
+.fabimg{
+    width: inherit;
+    height: inherit;
+}
+
+.buttonGroup {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    height: 50%;
+    max-height: 350px;
+}
+
+.buttonGroup > div > button {
+    background-color: #aa1000!important;
+    color: white;
+}

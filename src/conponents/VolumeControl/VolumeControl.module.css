@@ -1,0 +1,20 @@
+.main{
+        height: 200px;
+    width: 40px;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    top: calc(50vh - 210px);
+    align-items: center;
+    justify-content: space-between;
+    position: absolute;
+    border-radius: 20px;
+    right: 40px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    
+}
+
+.volumeRange{
+    transform: rotate(-90deg);
+}

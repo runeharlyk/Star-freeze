@@ -1,0 +1,63 @@
+.main{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.container{
+    display: flex;
+    justify-content: space-evenly;
+    max-width: 300px;
+    width: 33%;
+    font-size: 2em;
+}
+
+.gameList{
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    margin-left: 20px;
+    overflow-x: scroll ;
+    scroll-snap-type: x mandatory;
+    width: calc(100vw - 200px);
+    padding-top: 20px;
+}
+
+.gameCard{
+    height: 30vh;
+    width: 30vh;
+    overflow: hidden;
+    flex:none;
+    margin-right: 20px;
+    margin-bottom: 20px;
+    border-radius: 2px;
+}
+.gameCard:not(:first-child){
+    margin-bottom: 60px;
+}
+
+.gameCard:first-child{
+    height: inherit;
+}
+div:first-child > .gameCard .gameCardImage {
+    height: 50vh;
+}
+
+.hoverCard {
+    scroll-snap-align: start;
+    transform-origin: 0px center;
+}
+
+.gameList > div:first-child {
+    padding-left: 20px;
+}
+
+.gameCard::not(:first-child) .gameCardImage {
+    width: 40vh;   
+}
+
+.gameCardImage {
+    height: 30vh;
+    box-sizing: border-box;
+    overflow: hidden;
+}

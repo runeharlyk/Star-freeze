@@ -1,0 +1,19 @@
+.main{
+    height: 10vh;
+    width: calc(100vw - 200px);
+    left: 200px;
+    top: 90vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    color: var(--font-color);
+}
+
+.container{
+    display: flex;
+    justify-content: space-between;
+    width: calc(100vw - 240px);
+    height: inherit;
+    border-top: 3px solid #66676a;
+}

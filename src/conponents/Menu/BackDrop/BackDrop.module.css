@@ -1,0 +1,15 @@
+.main{
+    height: 50vh;
+    width: calc(100vw - 200px);
+    left: 200px;
+    top: 0vh;
+    position: absolute;
+    overflow: hidden;
+    z-index: -1;
+}
+
+.backdropImage {
+    width: 100%;
+    filter: blur(8px);
+}
+

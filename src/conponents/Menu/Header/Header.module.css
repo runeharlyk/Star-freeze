@@ -1,0 +1,34 @@
+.main{
+    height: 12vh;
+    width: calc(100vw - 200px);;
+    left: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: absolute;
+    min-height: 135px;
+}
+
+.container{
+    display: flex;
+    justify-content: space-evenly;
+    max-width: 300px;
+    width: 50%;
+    color: #2f3136;
+    font-size: 2em;
+}
+
+.red{
+    color: var(--second-controller-color) !important;
+    background-color: white !important;
+}
+
+.blue{
+    color: var(--first-controller-color) !important;
+    background-color: white !important;
+}
+
+.yellow{
+    color: #ffb300 !important;
+    background-color: white !important;
+}
