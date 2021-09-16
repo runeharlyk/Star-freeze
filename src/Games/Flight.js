@@ -9,7 +9,7 @@ import { ArrowHelper } from 'three';
 
 var threejs_quaternion = new THREE.Quaternion();
 var baseQ = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), Math.PI);
-var threejs_quaternion_offsets = new THREE.Quaternion();
+var threejs_quaternion_offsets = new THREE.Quaternion(-0.49815297449383966, -0.4115880994007512, -0.5126473496172514, 0.5653596601854652);
 var _q = new THREE.Quaternion();
 var _Q = new THREE.Quaternion();
 var dir = new THREE.Vector3(0, 0, 0)
@@ -31,6 +31,7 @@ const Jet = (position) => {
             else if (message.type === "bpress") 
                 if (message.state === 1 && message.button === "home") {
                     threejs_quaternion_offsets.copy(threejs_quaternion).invert();
+                    console.log(threejs_quaternion_offsets);
                 }
         })
     },[])
@@ -143,7 +144,8 @@ const Flight = () => {
     }
     useEffect(()=>{
         Object.keys(Nexus.peerConnections).forEach((uuid) => {
-            Nexus.send({ 'type': 'enable', 'feature': 'devicemotion' }, uuid)
+            //Nexus.send({ 'type': 'enable', 'feature': 'devicemotion' }, uuid)
+            Nexus.send({ 'type': 'controller', 'id':1 }, uuid)
         });
     },[])
     return <Canvas className="game">

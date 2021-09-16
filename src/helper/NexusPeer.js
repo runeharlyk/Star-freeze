@@ -27,7 +27,7 @@ var NexusPeer = function () {
     this.peerConnection = null;
     this.peerConnections = {};
     this.events = {};
-    this.socket = {};
+    this.gateway = {};
     this.RTCConfig = {
         'iceServers': [
             { 'urls': 'stun:stun.stunprotocol.org:3478' },
@@ -96,7 +96,7 @@ NexusPeer.prototype.join = function(pin) {
     }
     this.DataChannel.onopen = () => { this.emit("connect") };
     this.DataChannel.onclose = () => { this.emit("close") };
-    this.socket.onmessage = data => {
+    this.gateway.onmessage = data => {
         if (!this.isJSON(data.data)) { console.log("Got string, not JSON"); return }
         var message = JSON.parse(data.data);
         switch (message.type) {
@@ -104,11 +104,11 @@ NexusPeer.prototype.join = function(pin) {
                 this.peerConnection.setRemoteDescription(new RTCSessionDescription(message.sdp))
                     .then(() => {
                         for (var i = 0; i < this.localIce.length; i++) {
-                            this.socket.send(JSON.stringify({ 'ice': this.localIce[i] }));
+                            this.gateway.send(JSON.stringify({ 'ice': this.localIce[i] }));
                         }
                     }).catch(this.errorHandler);
                 break;
-            case "newice":
+            case "ice":
                 if (typeof (this.peerConnection.addIceCandidate) === "function"){
                     this.peerConnection.addIceCandidate(new RTCIceCandidate(message.ice)).catch(this.errorHandler);
                 }
@@ -120,7 +120,7 @@ NexusPeer.prototype.join = function(pin) {
 
     this.peerConnection.createOffer().then((description) => {
         this.peerConnection.setLocalDescription(description).then(() => {
-            this.socket.send(JSON.stringify({ 'type': 'join', 'sdp': this.peerConnection.localDescription, 'pin': pin }));
+            this.gateway.send(JSON.stringify({ 'type': 'join', 'sdp': this.peerConnection.localDescription, 'pin': pin }));
             this.peerConnection.ondatachannel = (event) => {
                 this.peerConnection = event.channel;
                 this.peerConnection.onmessage = (rtcMess) => {
@@ -138,19 +138,20 @@ NexusPeer.prototype.join = function(pin) {
     }).catch(this.errorHandler);
 }
 NexusPeer.prototype.host = function (SocketUrl){
-    this.socket = new WebSocket(SocketUrl);
-    this.socket.onopen = () => {
-        this.socket.send(JSON.stringify({ 'type': 'get-uuid' }));
-        this.socket.send(JSON.stringify({ "type": "create" }));
-    }
-    this.socket.onmessage = data => {
+    this.gateway = new WebSocket(SocketUrl);
+    this.gateway.onopen = () => {this.gateway.send(JSON.stringify({ "type": "create" }))}
+    this.gateway.onmessage = data => {
         if (!this.isJSON(data.data)) return
         var message = JSON.parse(data.data);
-        if (message.type === "uuid") this.uuid = message.uuid;
+        this.emit("gateway", message)
+        if (message.type === "ping") this.gateway.send(JSON.stringify({ 'type': 'pong'}));
         else if(message.type === "connect-pin")this.emit("room", message.pin);
-        else if (message.type === "newice") this.peerConnections[message.remoteuuid].addIceCandidate(new RTCIceCandidate(message.ice)).catch(this.errorHandler);
+        else if (message.type === "ice") {
+            if(!message.ice)return
+            this.peerConnections[message.id].addIceCandidate(new RTCIceCandidate(message.ice)).catch(this.errorHandler);
+        }
         else if(message.type === "offer"){
-            let remoteuuid = message.remoteuuid;
+            let remoteuuid = message.id;
             this.peerConnections[remoteuuid] = new RTCPeerConnection(this.pcConfig);
             //this.pc[remoteuuid].emitter = new EventEmitter();
             //this.pc[remoteuuid].emitter.userid = remoteuuid;
@@ -158,7 +159,7 @@ NexusPeer.prototype.host = function (SocketUrl){
             this.peerConnections[remoteuuid].onicecandidate = (event) => {
                 if (event.candidate != null) {
                     for (var i = 0; i < Object.keys(this.peerConnections).length; i++) {
-                        this.socket.send(JSON.stringify({ 'ice': event.candidate, 'remoteuuid': Object.keys(this.peerConnections)[i] }));
+                        this.gateway.send(JSON.stringify({'type':'ice', 'ice': event.candidate, 'id': Object.keys(this.peerConnections)[i] }));
                     }
                 }
             }
@@ -168,7 +169,6 @@ NexusPeer.prototype.host = function (SocketUrl){
             //this.DataChannels[remoteuuid].onopen = (event) => { this.emit("playerjoin", this.peerConnections[remoteuuid]) }
             //this.DataChannels[remoteuuid].onclose = (event) => { this.peerConnections[remoteuuid].emitter.emit("close", ""); delete this.peerConnections[remoteuuid]; delete this.DataChannels[remoteuuid] };
             this.peerConnections[remoteuuid].onconnectionstatechange = (event) => { this.debug("connectionChange", { 'connection': event.target }) }
-            console.log(this.peerConnections[remoteuuid]);
             this.peerConnections[remoteuuid].ondatachannel = (event) => {
                 this.emit("playerjoin", remoteuuid);
                 event.channel.onmessage = (mess) => {
@@ -185,7 +185,7 @@ NexusPeer.prototype.host = function (SocketUrl){
                 // Only create answers in response to offers
                 this.peerConnections[remoteuuid].createAnswer().then((description) => {
                     this.peerConnections[remoteuuid].setLocalDescription(description).then(() => {
-                        this.socket.send(JSON.stringify({ 'type': 'answer', 'sdp': this.peerConnections[remoteuuid].localDescription, 'remoteuuid': remoteuuid }));
+                        this.gateway.send(JSON.stringify({ 'type': 'answer', 'sdp': this.peerConnections[remoteuuid].localDescription, 'id': remoteuuid }));
                     }).catch(this.errorHandler);
                 }).catch(this.errorHandler);
             }).catch(this.errorHandler);
@@ -193,24 +193,25 @@ NexusPeer.prototype.host = function (SocketUrl){
     }
 }
 NexusPeer.prototype.connect = function(SocketUrl) {
-    this.socket = new WebSocket(SocketUrl);
-    this.socket.onopen = () => {
-        this.socket.send(JSON.stringify({ 'type': 'get-uuid' }));
-    }
-    this.socket.onmessage = data => {
+    this.gateway = new WebSocket(SocketUrl);
+    this.gateway.onmessage = data => {
         if (!this.isJSON(data.data)) return
         var message = JSON.parse(data.data);
-        if(message.type === "uuid")this.uuid = message.uuid;
+        this.emit("gateway", message);
+    }
+    this.gateway.onclose = () => {
+        console.error("Lost connection to gateway");
     }
 }
 NexusPeer.prototype.broadcast = function(message){
-    if(!"DataChannels" in this || !this.DataChannels.readyState === "open"){
+    if(!"DataChannels" in this || !this?.DataChannels?.readyState === "open"){
         this.send(message);
         return;
     };
-    for (var i = 0; i < Object.keys(this.DataChannels).length; i++) {
-        if (this.DataChannels[Object.keys(this.DataChannels)[i]].readyState !== 'open') return;
-        this.DataChannels[Object.keys(this.DataChannels)[i]].send(message);
+    for (var i = 0; i < Object.keys(this?.DataChannels || {}).length; i++) {
+        console.log(this?.DataChannels[Object.keys(this?.DataChannels)[i]]?.readyState);
+        if (this?.DataChannels[Object.keys(this?.DataChannels)[i]]?.readyState !== 'open') return;
+        this?.DataChannels[Object.keys(this?.DataChannels)[i]].send(message);
         
     }
 } 

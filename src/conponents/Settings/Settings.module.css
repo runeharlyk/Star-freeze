@@ -1,0 +1,58 @@
+.but {
+    border-radius: 2px;
+    color: white;
+}
+
+.smallcolumn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    width: 30%;
+    height: 100%;
+}
+
+.bigcolumn {
+    width: 70%;
+    height: 100%;
+}
+
+.button{
+    width: 70%;
+    border-radius: 2px;
+}
+
+.settingsContainer {
+    width: 100%;
+    height: 100%;
+}
+
+.settingsContent{
+        width: calc(100% - 50px);
+    max-height: 90%;
+    padding: 0 25px;
+    display: flex;
+    font-size: 1.3em;
+    flex-direction: column;
+}
+
+.row {
+    width: 100%;
+    display: flex ;
+    justify-content: space-between;
+    border-radius: 2px;
+    margin-bottom: 20px;
+}
+
+.but {
+    display: block;
+    text-align: center;
+    width: 100%;
+    text-align: left;
+}
+
+.line{
+    border-top: 2px solid lightslategray;
+    margin-top: -5px;
+    margin-bottom: 7px;
+}

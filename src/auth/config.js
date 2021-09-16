@@ -1,7 +1,4 @@
 export const config = {
-    // DO NOT USE THESE CREDENTIALS ! THEY ARE HERE TO HELP IN THE LEARNING PROCESS.
-    // ANY AND ALL DATA ON THAT DOMAIN IS SUBJECT TO CHANGE AND REMOVAL AT ANY TIME
-    // THIS ACCOUNT IS ALSO ON THE FREE PLAN AND IS SUBJECT TO RESTRICTIONS !
     apiKey: "AIzaSyAb5JUsL8sxZJZhkFa6rHBT8EukbmU2FWg",
     authDomain: "web-console-c3335.firebaseapp.com",
     projectId: "web-console-c3335",

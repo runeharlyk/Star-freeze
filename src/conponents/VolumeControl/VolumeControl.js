@@ -3,11 +3,13 @@ import { useState, useEffect, useRef } from 'react';
 import {VolumeUp, VolumeDown, VolumeOff} from '@material-ui/icons';
 import { useSpring, animated } from "react-spring";
 import Nexus from '../../helper/Nexus';
+import { useStateManager } from '../../helper/useStateManager';
 
 const VolumeControl = () => {
-    const [volume, setVolume] = useState(10);
+    const [localVolume, setLocalVolume] = useState(10);
     const [open, setOpen] = useState(false);
     const [timeOutState, setTimeoutState] = useState();
+    const {setVolume} = useStateManager();
     const input = useRef();
     const props = useSpring({
         right: open ? "40px" : "-100px"
@@ -19,24 +21,26 @@ const VolumeControl = () => {
         setTimeoutState(setTimeout(() => {
             setOpen(false);
         }, 3000));
-        input.current.value = volume;
-    },[volume]) 
+        input.current.value = localVolume;
+    },[localVolume]) 
 
     useEffect(() => {
         Nexus.on("message", data => {
             if(data.type !== "volume")return
-            setVolume(data.volume);
+            setLocalVolume(data.volume);
         })
     },[])
 
     const handleVolumeChange = (e) => {
-        setVolume(e.target.value)
+        setLocalVolume(e.target.value);
+        setVolume(Math.round(e.target.value/15*100)/100);
+        console.log(Math.round(e.target.value / 15 * 100) / 100)
     }
     return <animated.div className={styles.main} style={props}>
        
-        {volume == 0 ? <VolumeOff />:volume <=10?<VolumeDown />:<VolumeUp />}
+        {localVolume == 0 ? <VolumeOff />:localVolume <=10?<VolumeDown />:<VolumeUp />}
         <input className={styles.volumeRange} ref={input} onChange={handleVolumeChange} defaultValue="10" type="range" min="0" max="15" />
-        {volume}
+        {localVolume}
     </animated.div>
 }
 

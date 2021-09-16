@@ -5,11 +5,12 @@ import { useSpring, animated, config } from "react-spring";
 import { WebAsset } from '@material-ui/icons'
 import useSound from 'use-sound';
 import LaunchSound from '../../../sounds/Popup + Run Title.wav'
+import { useStateManager } from '../../../helper/useStateManager';
 
 const gamesJson = [{
     "id": 0,
-    "name": "The Lengend of Zelda: Breath of the Wild",
-    "img_src": "http://s01.riotpixels.net/data/93/2f/932f6518-afcf-46fb-88e8-7105ea306f73.jpg/cover.legend-of-zelda-breath-of-the-wild.1000x1363.2017-08-24.147.jpg",
+    "name": "Island flyover",
+    "img_src": "https://developer.runeharlyk.dk/Explore/files/The-Impecunious/games/planeimage.PNG",
     "controller_id": 0,
 },
 {
@@ -49,18 +50,25 @@ const gamesJson = [{
     "name": "Vr camera demo",
     "img_src": "https://developer.runeharlyk.dk/Explore/files/The-Impecunious/games/simpleplatform/cover.PNG",
     "controller_id": 1,
-}
+    },
+    {
+        "id": 7,
+        "name": "The Lengend of Zelda: Breath of the Wild",
+        "img_src": "https://s01.riotpixels.net/data/93/2f/932f6518-afcf-46fb-88e8-7105ea306f73.jpg/cover.legend-of-zelda-breath-of-the-wild.1000x1363.2017-08-24.147.jpg",
+        "controller_id": 0,
+    },
 ];
 
 const calc = (x, y, ref) => [-(y - window.innerHeight / 2) / 20, (x - (ref.current.getBoundingClientRect().left + ref.current.getBoundingClientRect().width/2)) / 20, 1]
 const trans = (x, y, s) => `perspective(600px) rotateX(${x}deg) rotateY(${y}deg) scale(${s})`
 
 const GameCard = (prop) => {
-    const [playLaunch] = useSound(LaunchSound);
+    const {setGame, volume} = useStateManager()
+    const [playLaunch] = useSound(LaunchSound, { volume });
     const [props, set] = useSpring(() => ({ xys: [0, 0, 1], config: config.default }))
     const refference = useRef();
     return (
-        <animated.div onClick={playLaunch} ref={refference} className={styles.hovercard} onMouseMove={({ clientX: x, clientY: y }) => (set({ xys: calc(x, y, refference) }))}
+        <animated.div onClick={() => {playLaunch();setGame(prop.game.id)}} ref={refference} className={styles.hovercard} onMouseMove={({ clientX: x, clientY: y }) => (set({ xys: calc(x, y, refference) }))}
         onMouseLeave={() => set({ xys: [0, 0, 1] })}
         style={{
         transform: props.xys.interpolate(trans)
