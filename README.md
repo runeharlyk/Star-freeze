@@ -1,7 +1,7 @@
 # Starfreeze :video_game:
 WebRTC Gameplatform. 
-Try developement version of Starfreeze [Here](https://play.runeharlyk.dk/Starfreeze)
-and controller [Here](https://play.runeharlyk.dk/)
+Try developement version of Starfreeze [Here](https://play.runeharlyk.dk/)
+and controller [Here](https://play.runeharlyk.dk/player)
 
 ## What and why
 The Impecunious is an new videogame platform. 
@@ -21,8 +21,8 @@ Starfreeze uses a number of open source projects to work properly:
 * [NoSleep.js] - Keeping phones on while playing
 * [qrcode.js] - Generate qr code for fast connection setup.
 * [FultTilt.js] - Normalizing device motion 
-* [node.js] - evented I/O for the backend
-* [Express] - fast node.js network app framework [@tjholowaychuk]
+* [node.js] - Evented I/O for the backend
+* [Express] - Fast node.js network app framework [@tjholowaychuk]
 
 
 
